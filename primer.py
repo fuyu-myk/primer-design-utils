@@ -34,8 +34,13 @@ def construct_forward_primer(sequence: str, nmer: int, forward_re_site: str, for
     if nmer > len(sequence):
         raise ValueError("nmer cannot be greater than the length of the target sequence.")
 
-    nmer_sequence = sequence[:nmer]
-    forward_primer = forward_re_site + forward_tag + nmer_sequence
+    start_codon = sequence[:3]
+
+    if start_codon != "ATG":
+        raise ValueError("The target sequence does not start with a valid start codon (ATG).")
+    
+    remaining_sequence = sequence[3:nmer+3]
+    forward_primer = forward_re_site + start_codon + forward_tag + remaining_sequence
 
     return forward_primer
 
@@ -53,10 +58,23 @@ def construct_reverse_primer(sequence: str, nmer: int, reverse_re_site: str, rev
     if nmer > len(sequence):
         raise ValueError("nmer cannot be greater than the length of the target sequence.")
 
-    nmer_sequence = sequence[-nmer:]
-    nmer_complement = complement(nmer_sequence)
+    stop_codon = sequence[-3:]
+
+    if stop_codon not in ["TAA", "TAG", "TGA"]:
+        raise ValueError("The target sequence does not end with a valid stop codon (TAA, TAG, TGA).")
+    
+    remaining_sequence = sequence[-nmer-3:-3]
+
+    stop_complement = complement(stop_codon)
+    nmer_complement = complement(remaining_sequence)
+
+    stop_reverse_complement = reverse(stop_complement)
     nmer_reverse_complement = reverse(nmer_complement)
-    reverse_primer = reverse_re_site + reverse(reverse_tag) + nmer_reverse_complement
+
+    tag_complement = complement(reverse_tag)
+    tag_reverse = reverse(tag_complement)
+
+    reverse_primer = reverse_re_site + stop_reverse_complement + tag_reverse + nmer_reverse_complement
 
     return reverse_primer
 

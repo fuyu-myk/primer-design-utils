@@ -5,11 +5,14 @@ from temp import calculate_tm
 from len import get_length
 
 
-def fmt_tm_print(tm_value: float, ta_value: float) -> None:
+def fmt_tm_print(forward_tm: float, forward_ta: float, reverse_tm: float, reverse_ta: float) -> None:
     print("")
     print("="*60)
-    print("Melting Temperature (Tm) of the primer: " + '\033[94m' + '\033[1m' + f"{tm_value:.2f}" + " °C" + '\033[0m' + '\033[0m')
-    print("Annealing Temperature (Ta) of the primer: " + '\033[94m' + '\033[1m' + f"{ta_value:.2f}" + " °C" + '\033[0m' + '\033[0m')
+    print("Melting Temperature (Tm) of the forward primer: " + '\033[94m' + '\033[1m' + f"{forward_tm:.2f}" + " °C" + '\033[0m' + '\033[0m')
+    print("Annealing Temperature (Ta) of the forward primer: " + '\033[94m' + '\033[1m' + f"{forward_ta:.2f}" + " °C" + '\033[0m' + '\033[0m')
+    print("-"*60)
+    print("Melting Temperature (Tm) of the reverse primer: " + '\033[94m' + '\033[1m' + f"{reverse_tm:.2f}" + " °C" + '\033[0m' + '\033[0m')
+    print("Annealing Temperature (Ta) of the reverse primer: " + '\033[94m' + '\033[1m' + f"{reverse_ta:.2f}" + " °C" + '\033[0m' + '\033[0m')
     print("="*60)
     print("")
     print(
@@ -83,8 +86,10 @@ def main():
 
     # Subparser for Tm calculation
     tm_parser = subparsers.add_parser("temp", help="Calculate the melting temperature (Tm) and annealing temperature (Ta) of a given primer sequence.")
-    tm_parser.add_argument("--primer", dest="primer_sequence", required=True,
-                           help="Input full DNA sequence (5' to 3') of the primer.")
+    tm_parser.add_argument("--forward", dest="forward_primer", required=True,
+                           help="Input full DNA sequence (5' to 3') of the forward primer.")
+    tm_parser.add_argument("--reverse", dest="reverse_primer", required=True,
+                           help="Input full DNA sequence (5' to 3') of the reverse primer.")
     tm_parser.add_argument("--nmer", dest="nmer", type=int, required=True,
                            help="Length of the DNA segment from the 3' end to consider for Tm calculation.")
 
@@ -115,12 +120,15 @@ def main():
     args = parser.parse_args()
 
     if args.command == "temp":
-        primer_sequence: str = "".join(args.primer_sequence.upper().split())
+        forward_primer: str = "".join(args.forward_primer.upper().split())
+        reverse_primer: str = "".join(args.reverse_primer.upper().split())
 
-        tm_value = calculate_tm(primer_sequence, args.nmer)
-        ta_value = tm_value - 5
+        forward_tm = calculate_tm(forward_primer, args.nmer)
+        reverse_tm = calculate_tm(reverse_primer, args.nmer)
+        forward_ta = forward_tm - 5
+        reverse_ta = reverse_tm - 5
 
-        fmt_tm_print(tm_value, ta_value)
+        fmt_tm_print(forward_tm, forward_ta, reverse_tm, reverse_ta)
     
     elif args.command == "len":
         target_seq: str = "".join(args.input_string.upper().split())
@@ -151,10 +159,12 @@ def main():
 
         fmt_primer_print(forward_primer, reverse_primer)
 
-        tm_value = calculate_tm(forward_primer, args.nmer)
-        ta_value = tm_value - 5
+        forward_tm = calculate_tm(forward_primer, args.nmer)
+        reverse_tm = calculate_tm(reverse_primer, args.nmer)
+        forward_ta = forward_tm - 5
+        reverse_ta = reverse_tm - 5
 
-        fmt_tm_print(tm_value, ta_value)
+        fmt_tm_print(forward_tm, forward_ta, reverse_tm, reverse_ta)
 
         pcr_product_length = get_length(target_seq, forward_primer, reverse_primer)
 

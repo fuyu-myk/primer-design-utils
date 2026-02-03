@@ -105,3 +105,4 @@ python main.py temp \
 - [NCBI's Gene Database](https://www.ncbi.nlm.nih.gov/gene/)
 - [NCBI's Primer-BLAST](https://www.ncbi.nlm.nih.gov/tools/primer-blast/)
 - [RE finder](https://enzymefinder.neb.com/)
+- [NEBcutter](https://nc3.neb.com/NEBcutter/)

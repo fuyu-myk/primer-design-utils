@@ -95,7 +95,8 @@ Template command:
 
 ```bash
 python main.py temp \
---primer ""
+--forward "" \
+--reverse "" \
 --nmer 
 ```
 

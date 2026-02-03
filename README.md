@@ -13,7 +13,34 @@ A useful site to check for primer validity is [NCBI's Primer-BLAST](https://www.
 
 ## What each script does
 
+**[main.py](main.py)**: Main script that combines the functionalities of all other scripts. Use this script to access all functionalities in one place.
+
+This script calls the other scripts based on the subcommand provided. The subcommands are as follows:
+
+- `primer`: Calls the [primer.py](primer.py) script
+- `len`: Calls the [len.py](len.py) script
+- `temp`: Calls the [temp.py](temp.py) script
+- `all`: Calls all three scripts in sequences
+
+> [!NOTE]
+> When using the `all` subcommand, ensure that the parameters provided are valid for all scripts to prevent undefined behavior.
+> I.e., the disclaimers for each individual script still apply.
+
+Template command to call all functionalities (tags are optional):
+
+```bash
+python main.py all \
+--seq "" \
+--nmer  \
+--forward-re "" \
+--reverse-re "" \
+--forward-tag "" \
+--reverse-tag ""
+```
+
 **[primer.py](primer.py)**: Outputs the forward and reverse primers with the given parameters
+
+This module requires the following parameters:
 
 - `--seq`: Full target coding sequence (5' - 3')
 - `--nmer`: Number corresponding to number of complementary nucleotides to the target sequence in the primer
@@ -28,7 +55,7 @@ A useful site to check for primer validity is [NCBI's Primer-BLAST](https://www.
 Template command (tags are optional):
 
 ```bash
-python primer.py \
+python main.py primer \
 --seq "" \
 --nmer  \
 --forward-re "" \
@@ -39,6 +66,8 @@ python primer.py \
 
 **[len.py](len.py)**: Outputs the length of the PCR product given the target sequence and primers
 
+This module requires the following parameters:
+
 - `--seq`: Full target coding sequence
 - `--forward-primer`: Full sequence of the forward primer
 - `--reverse-primer`: Full sequence of the reverse primer
@@ -46,13 +75,15 @@ python primer.py \
 Template command:
 
 ```bash
-python len.py \
+python main.py len \
 --seq "" \
 --forward "" \
 --reverse ""
 ```
 
 **[temp.py](temp.py)**: Outputs the melting and annealing temperature of a given primer sequence
+
+This module requires the following parameters:
 
 - `--primer`: Full sequence of the primer (5' - 3')
 - `--nmer`: Number corresponding to number of complementary nucleotides to the target sequence in the primer
@@ -63,7 +94,7 @@ python len.py \
 Template command:
 
 ```bash
-python temp.py \
+python main.py temp \
 --primer ""
 --nmer 
 ```

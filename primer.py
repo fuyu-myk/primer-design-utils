@@ -1,6 +1,3 @@
-import argparse
-
-
 def reverse(str: str) -> str:
     """
     Return the reverse of the input DNA sequence.
@@ -63,47 +60,20 @@ def construct_reverse_primer(sequence: str, nmer: int, reverse_re_site: str, rev
 
     return reverse_primer
 
+def construct_primers(sequence: str, nmer: int, forward_re_site: str, reverse_re_site: str, forward_tag: str = "", reverse_tag: str = "") -> tuple[str, str]:
+    """
+    Construct both forward and reverse primer sequences.
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Edit a given DNA sequence.")
-    parser.add_argument("--seq", dest="input_string", required=True,
-                        help="Input full DNA sequence (5' to 3') of target gene.")
-    parser.add_argument("--nmer", dest="nmer", type=int, required=True,
-                        help="Length of the DNA to be added to the primers.")
-    parser.add_argument("--forward-re", dest="forward_re_site", required=True,
-                        help="Sequence of the RE site (5' to 3') of the forward primer.")
-    parser.add_argument("--reverse-re", dest="reverse_re_site", required=True,
-                        help="Sequence of the RE site (5' to 3') of the reverse primer.")
-    parser.add_argument("--forward-tag", dest="forward_tag", required=False,
-                        help="Additional tag sequence for the forward primer.")
-    parser.add_argument("--reverse-tag", dest="reverse_tag", required=False,
-                        help="Additional tag sequence for the reverse primer.")
-    args = parser.parse_args()
+    Args:
+        sequence (str): Target DNA sequence.
+        nmer (int): Number of nucleotides from each end to include.
+        forward_re_site (str): Restriction enzyme site for the forward primer.
+        reverse_re_site (str): Restriction enzyme site for the reverse primer.
+        forward_tag (str, optional): Additional tag sequence for the forward primer. Defaults to "".
+        reverse_tag (str, optional): Additional tag sequence for the reverse primer. Defaults to "".
+    """
 
-    target_seq: str = "".join(args.input_string.upper().split())
-    forward_re_site: str = args.forward_re_site.upper()
-    reverse_re_site: str = args.reverse_re_site.upper()
-    forward_tag: str = "".join(args.forward_tag.upper().split()) if args.forward_tag else ""
-    reverse_tag: str = "".join(args.reverse_tag.upper().split()) if args.reverse_tag else ""
-    
-    forward_primer = construct_forward_primer(target_seq, args.nmer, forward_re_site, forward_tag)
-    reverse_primer = construct_reverse_primer(target_seq, args.nmer, reverse_re_site, reverse_tag)
+    forward_primer = construct_forward_primer(sequence, nmer, forward_re_site, forward_tag)
+    reverse_primer = construct_reverse_primer(sequence, nmer, reverse_re_site, reverse_tag)
 
-    print("")
-    print("="*60)
-    print("Generated Primer Sequences")
-    print("="*60)
-    print("")
-    print(f"Forward Primer:\n{forward_primer}")
-    print("")
-    print(f"Reverse Primer:\n{reverse_primer}")
-    print("")
-    print(
-        '\033[91m' +\
-        '\033[1m' +\
-        "Note:\n" +\
-        " - Primers are shown in 5' to 3' direction\n" +\
-        " - Primer sequences do not include the additional bases required for efficient restriction enzyme cutting" +\
-        '\033[0m' +\
-        '\033[0m'
-    )
+    return forward_primer, reverse_primer

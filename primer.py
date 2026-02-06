@@ -78,7 +78,16 @@ def construct_reverse_primer(sequence: str, nmer: int, reverse_re_site: str, rev
 
     return reverse_primer
 
-def construct_primers(sequence: str, nmer: int, forward_re_site: str, reverse_re_site: str, forward_tag: str = "", reverse_tag: str = "") -> tuple[str, str]:
+def construct_primers(
+        seq_a: str,
+        seq_b: str,
+        mut: str,
+        nmer: int,
+        forward_re_site: str,
+        reverse_re_site: str,
+        forward_tag: str = "",
+        reverse_tag: str = ""
+    ) -> tuple[str, str, str, str]:
     """
     Construct both forward and reverse primer sequences.
 
@@ -91,7 +100,51 @@ def construct_primers(sequence: str, nmer: int, forward_re_site: str, reverse_re
         reverse_tag (str, optional): Additional tag sequence for the reverse primer. Defaults to "".
     """
 
-    forward_primer = construct_forward_primer(sequence, nmer, forward_re_site, forward_tag)
-    reverse_primer = construct_reverse_primer(sequence, nmer, reverse_re_site, reverse_tag)
+    if seq_b != "":
+        primer_a = construct_forward_primer(seq_a, nmer, forward_re_site, forward_tag)
+        primer_d = construct_reverse_primer(seq_b, nmer, reverse_re_site, reverse_tag)
 
-    return forward_primer, reverse_primer
+        primer_c, primer_b = construct_mutation_primers(seq_a, seq_b, nmer, mut)
+
+        return primer_a, primer_b, primer_c, primer_d
+
+    forward_primer = construct_forward_primer(seq_a, nmer, forward_re_site, forward_tag)
+    reverse_primer = construct_reverse_primer(seq_a, nmer, reverse_re_site, reverse_tag)
+
+    return forward_primer, "", "", reverse_primer
+
+def construct_mutation_primers(a: str, b: str, nmer: int, mut: str) -> tuple[str, str]:
+    """
+    Construct mutation primers for site-directed mutagenesis.
+
+    Args:
+        a (str): Target DNA sequence A.
+        b (str): Target DNA sequence B.
+        nmer (int): Number of nucleotides from each end to include.
+        mut (str): Mutation sequence to be introduced.
+    """
+
+    target_a = a[-nmer-3:-3]
+    target_b = b[3:nmer+3]
+    forward = target_a + mut + target_b
+    rev = complement(reverse(forward))
+
+    return forward, rev
+
+def construct_mutation_primers_single(a: str, b: str, nmer: int, mut: str) -> tuple[str, str]:
+    """
+    Construct mutation primers for site-directed mutagenesis.
+
+    Args:
+        a (str): Target DNA sequence A.
+        b (str): Target DNA sequence B.
+        nmer (int): Number of nucleotides from each end to include.
+        mut (str): Mutation sequence to be introduced.
+    """
+
+    target_a = a[-nmer:]
+    target_b = b[:nmer]
+    forward = target_a + mut + target_b
+    rev = complement(reverse(forward))
+
+    return forward, rev

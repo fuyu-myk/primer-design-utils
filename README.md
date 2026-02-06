@@ -17,10 +17,11 @@ A useful site to check for primer validity is [NCBI's Primer-BLAST](https://www.
 
 This script calls the other scripts based on the subcommand provided. The subcommands are as follows:
 
-- `primer`: Calls the [primer.py](primer.py) script
+- `primer`: Calls the [primer.py](primer.py) script for non-mutation primers
+- `mut-primer`: Calls the [primer.py](primer.py) script for mutation primers
 - `len`: Calls the [len.py](len.py) script
 - `temp`: Calls the [temp.py](temp.py) script
-- `all`: Calls all three scripts in sequences
+- `all`: Calls all three scripts in sequence
 
 > [!NOTE]
 > When using the `all` subcommand, ensure that the parameters provided are valid for all scripts to prevent undefined behavior.
@@ -31,6 +32,8 @@ Template command to call all functionalities (tags are optional):
 ```bash
 python main.py all \
 --seq "" \
+--seq-b "" \
+--mut "" \
 --nmer  \
 --forward-re "" \
 --reverse-re "" \
@@ -43,7 +46,9 @@ python main.py all \
 This module requires the following parameters:
 
 - `--seq`: Full target coding sequence (5' - 3')
+- `--seq-b`: Full target coding sequence of the other target gene (5' - 3') (if any)
 - `--nmer`: Number corresponding to number of complementary nucleotides to the target sequence in the primer
+- `--mut`: The mutation sequence (5' - 3'), i.e. extra bases to be introduced between target sequences (if any)
 - `--forward-re`: The restriction site sequence (5' - 3') of the restriction enzyme of choice for the forward primer
 - `--reverse-re`: The restriction site sequence (5' - 3') of the restriction enzyme of choice for the reverse primer
 - `--forward-tag`: The sequence of the tag of the forward primer (if any)
@@ -52,16 +57,28 @@ This module requires the following parameters:
 > [!NOTE]
 > This script does not check for the validity of the RE site sequences provided. Due diligence is required to ensure that the RE sites are valid.
 
-Template command (tags are optional):
+Template command for single/double sequences (seq-b, mut and tags are optional):
 
 ```bash
 python main.py primer \
 --seq "" \
+--seq-b "" \
 --nmer  \
+--mut "" \
 --forward-re "" \
 --reverse-re "" \
 --forward-tag "" \
 --reverse-tag ""
+```
+
+Template command for mutation primers (mut is required):
+
+```bash
+python main.py mut-primer \
+--seq "" \
+--nmer  \
+--pos  \
+--mut "" \
 ```
 
 **[len.py](len.py)**: Outputs the length of the PCR product given the target sequence and primers
@@ -69,16 +86,22 @@ python main.py primer \
 This module requires the following parameters:
 
 - `--seq`: Full target coding sequence
+- `--seq-b`: Full target coding sequence of the other target gene (5' - 3') (if any)
+- `--mut-primer`: Full sequence of the forward mutation primer (if any)
 - `--forward-primer`: Full sequence of the forward primer
 - `--reverse-primer`: Full sequence of the reverse primer
+- `--nmer`: Number corresponding to number of complementary nucleotides to the target sequence in the primer
 
 Template command:
 
 ```bash
 python main.py len \
 --seq "" \
+--seq-b "" \
+--mut-primer "" \
 --forward "" \
---reverse ""
+--reverse "" \
+--nmer 
 ```
 
 **[temp.py](temp.py)**: Outputs the melting and annealing temperature of a given primer sequence
@@ -87,9 +110,6 @@ This module requires the following parameters:
 
 - `--primer`: Full sequence of the primer (5' - 3')
 - `--nmer`: Number corresponding to number of complementary nucleotides to the target sequence in the primer
-
-> [!WARNING]
-> This script does not check if `nmer` is valid, i.e., if it exceeds the length of the target gene sequence.
 
 Template command:
 

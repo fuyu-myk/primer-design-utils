@@ -60,6 +60,7 @@ def fmt_primer_print(forward_primer: str, reverse_primer: str) -> None:
         " - Primers are shown in 5' to 3' direction\n" +\
         " - Primer sequences do not include the additional bases required for efficient restriction enzyme cutting" +\
         " - For mutation primers, please ensure that the position and mutation sequences are correct" +\
+        " - For mutation primers, please ensure that nmer is set appropriately, i.e. for a 43-mer primer, nmer should be (43 - 1) / 2 = 21" +\
         '\033[0m' +\
         '\033[0m'
     )
@@ -244,8 +245,24 @@ def main():
             raise ValueError("Position of mutation must be provided when only one sequence is given.")
         
         aa_idx = (args.pos - 1) * 3
-        target_a: str = "".join(args.seq[:aa_idx].upper().split())
-        target_b: str = "".join(args.seq[aa_idx + 3:].upper().split())
+        original_codon: str = args.seq[aa_idx:aa_idx + 3].upper()
+
+        changed_idx: int = -1
+
+        if len(mut) == 3:
+            for i in range (3):
+                if original_codon[i] != mut[i]:
+                    changed_idx = i
+                    break
+        else:
+            raise ValueError("Mutation sequence must be a codon of length 3.")
+
+        if changed_idx == -1:
+            raise ValueError("No changes detected between original codon and mutation codon.")
+        
+        target_a: str = "".join(args.seq[:aa_idx + changed_idx].upper().split())
+        target_b: str = "".join(args.seq[aa_idx + changed_idx + 1:].upper().split())
+        mut: str = mut[changed_idx]
 
         forward_primer, reverse_primer = construct_mutation_primers_single(target_a, target_b, args.nmer, mut)
 

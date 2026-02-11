@@ -58,8 +58,8 @@ def fmt_primer_print(forward_primer: str, reverse_primer: str) -> None:
         '\033[1m' +\
         "Note:\n" +\
         " - Primers are shown in 5' to 3' direction\n" +\
-        " - Primer sequences do not include the additional bases required for efficient restriction enzyme cutting" +\
-        " - For mutation primers, please ensure that the position and mutation sequences are correct" +\
+        " - Primer sequences do not include the additional bases required for efficient restriction enzyme cutting\n" +\
+        " - For mutation primers, please ensure that the position and mutation sequences are correct\n" +\
         " - For mutation primers, please ensure that nmer is set appropriately, i.e. for a 43-mer primer, nmer should be (43 - 1) / 2 = 21" +\
         '\033[0m' +\
         '\033[0m'

@@ -220,9 +220,6 @@ def main():
         if mut != "" and target_seq_b == "":
             raise ValueError("For mutation primers, sequence B must be provided.")
         
-        if target_seq_b != "" and mut == "":
-            raise ValueError("Mutation sequence must be provided when sequence B is given.")
-        
         primer_a, primer_b, primer_c, primer_d = construct_primers(
             target_seq,
             target_seq_b,
@@ -280,9 +277,6 @@ def main():
         if mut != "" and target_seq_b == "":
             raise ValueError("For mutation primers, sequence B must be provided.")
         
-        if target_seq_b != "" and mut == "":
-            raise ValueError("Mutation sequence must be provided when sequence B is given.")
-        
         primer_a, primer_b, primer_c, primer_d = construct_primers(
             target_seq,
             target_seq_b,
@@ -297,7 +291,7 @@ def main():
         if primer_b == "" and primer_c == "":
             fmt_primer_print(primer_a, primer_d)
         else:
-            fmt_primer_mutation_print(primer_a, primer_b, primer_c, primer_d)
+            fmt_primer_mutation_print(primer_a, primer_b.lower(), primer_c.lower(), primer_d)
 
         forward_tm = calculate_tm(primer_a, args.nmer)
         reverse_tm = calculate_tm(primer_d, args.nmer)

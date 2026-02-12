@@ -241,7 +241,7 @@ def main():
         if args.pos is None:
             raise ValueError("Position of mutation must be provided when only one sequence is given.")
         
-        aa_idx = (args.pos - 1) * 3
+        aa_idx = args.pos * 3
         original_codon: str = args.seq[aa_idx:aa_idx + 3].upper()
 
         changed_idx: int = -1

@@ -41,6 +41,10 @@ python main.py all \
 --reverse-tag ""
 ```
 
+> [!NOTE]
+> If `python` doesn't work, try `python3` instead.
+> For windows users, replace `\` with `^` for line continuation in the command prompt, and `\` with `` ` `` for line continuation in PowerShell.
+
 **[primer.py](primer.py)**: Outputs the forward and reverse primers with the given parameters
 
 This module requires the following parameters:
@@ -71,6 +75,10 @@ python main.py primer \
 --reverse-tag ""
 ```
 
+> [!NOTE]
+> If `python` doesn't work, try `python3` instead.
+> For windows users, replace `\` with `^` for line continuation in the command prompt, and `\` with `` ` `` for line continuation in PowerShell.
+
 Template command for mutation primers (mut is required):
 
 ```bash
@@ -80,6 +88,10 @@ python main.py mut-primer \
 --pos  \
 --mut "" \
 ```
+
+> [!NOTE]
+> If `python` doesn't work, try `python3` instead.
+> For windows users, replace `\` with `^` for line continuation in the command prompt, and `\` with `` ` `` for line continuation in PowerShell.
 
 **[len.py](len.py)**: Outputs the length of the PCR product given the target sequence and primers
 
@@ -104,6 +116,10 @@ python main.py len \
 --nmer 
 ```
 
+> [!NOTE]
+> If `python` doesn't work, try `python3` instead.
+> For windows users, replace `\` with `^` for line continuation in the command prompt, and `\` with `` ` `` for line continuation in PowerShell.
+
 **[temp.py](temp.py)**: Outputs the melting and annealing temperature of a given primer sequence
 
 This module requires the following parameters:
@@ -119,6 +135,10 @@ python main.py temp \
 --reverse "" \
 --nmer 
 ```
+
+> [!NOTE]
+> If `python` doesn't work, try `python3` instead.
+> For windows users, replace `\` with `^` for line continuation in the command prompt, and `\` with `` ` `` for line continuation in PowerShell.
 
 ## Useful sites
 

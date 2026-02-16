@@ -291,7 +291,7 @@ def main():
         if primer_b == "" and primer_c == "":
             fmt_primer_print(primer_a, primer_d)
         else:
-            fmt_primer_mutation_print(primer_a, primer_b.lower(), primer_c.lower(), primer_d)
+            fmt_primer_mutation_print(primer_a, primer_b, primer_c, primer_d)
 
         forward_tm = calculate_tm(primer_a, args.nmer)
         reverse_tm = calculate_tm(primer_d, args.nmer)

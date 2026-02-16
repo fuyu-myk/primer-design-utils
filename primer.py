@@ -104,7 +104,7 @@ def construct_primers(
         primer_a = construct_forward_primer(seq_a, nmer, forward_re_site, forward_tag)
         primer_d = construct_reverse_primer(seq_b, nmer, reverse_re_site, reverse_tag)
 
-        primer_c, primer_b = construct_mutation_primers(seq_a, seq_b, nmer, mut)
+        primer_c, primer_b = construct_concat_primers(seq_a, seq_b, nmer, mut)
 
         return primer_a, primer_b, primer_c, primer_d
 
@@ -113,9 +113,9 @@ def construct_primers(
 
     return forward_primer, "", "", reverse_primer
 
-def construct_mutation_primers(a: str, b: str, nmer: int, mut: str) -> tuple[str, str]:
+def construct_concat_primers(a: str, b: str, nmer: int, mut: str) -> tuple[str, str]:
     """
-    Construct mutation primers for site-directed mutagenesis.
+    Construct concat primers to join two DNA sequences.
 
     Args:
         a (str): Target DNA sequence A.
@@ -125,7 +125,7 @@ def construct_mutation_primers(a: str, b: str, nmer: int, mut: str) -> tuple[str
     """
 
     target_a = a[-nmer-3:-3]
-    target_b = b[3:nmer+3]
+    target_b = b[:nmer]
     forward = target_a + mut + target_b
     rev = complement(reverse(forward))
 
